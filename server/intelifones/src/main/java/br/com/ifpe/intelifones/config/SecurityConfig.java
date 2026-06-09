@@ -2,6 +2,7 @@ package br.com.ifpe.intelifones.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -30,14 +31,24 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/categorias").permitAll()
                         .requestMatchers("/api/categorias/{id}").permitAll()
-                        // Endpoints protegidos
-                        .requestMatchers("/api/produtos/**").authenticated()
-                        .requestMatchers("/api/categorias/**").authenticated()
+                        .requestMatchers("/api/produtos").permitAll()
+                        .requestMatchers("/api/produtos/{id}").permitAll()
+                        .requestMatchers("/api/produtos/disponiveis").permitAll()
+                        .requestMatchers("/api/produtos/buscar").permitAll()
+                        .requestMatchers("/api/produtos/categoria/**").permitAll()
+                        .requestMatchers("/api/produtos/{id}/comprar").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("VENDEDOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("VENDEDOR")
+                        .requestMatchers("/api/produtos/meus").hasRole("VENDEDOR")
+                        .requestMatchers("/api/produtos/**/repor").hasRole("VENDEDOR")
+                        .requestMatchers(HttpMethod.POST, "/api/categorias").hasRole("VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("VENDEDOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("VENDEDOR")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -47,9 +58,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
+    AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -60,7 +70,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
