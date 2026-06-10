@@ -27,9 +27,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4000", "http://localhost:8081"})
 @RestController
 @RequestMapping("/api/produtos")
-@CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Produtos", description = "Endpoints para gerenciamento de produtos")
 public class ProdutoController {

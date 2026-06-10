@@ -27,35 +27,43 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/api/categorias").permitAll()
-                        .requestMatchers("/api/categorias/{id}").permitAll()
-                        .requestMatchers("/api/produtos").permitAll()
-                        .requestMatchers("/api/produtos/{id}").permitAll()
-                        .requestMatchers("/api/produtos/disponiveis").permitAll()
-                        .requestMatchers("/api/produtos/buscar").permitAll()
-                        .requestMatchers("/api/produtos/categoria/**").permitAll()
-                        .requestMatchers("/api/produtos/{id}/comprar").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("VENDEDOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("VENDEDOR")
-                        .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("VENDEDOR")
-                        .requestMatchers("/api/produtos/meus").hasRole("VENDEDOR")
-                        .requestMatchers("/api/produtos/**/repor").hasRole("VENDEDOR")
-                        .requestMatchers(HttpMethod.POST, "/api/categorias").hasRole("VENDEDOR")
-                        .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("VENDEDOR")
-                        .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("VENDEDOR")
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(request -> {
+            var config = new org.springframework.web.cors.CorsConfiguration();
+            config.setAllowedOrigins(java.util.List.of("*"));
+            config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+            config.setAllowedHeaders(java.util.List.of("*"));
+            return config;
+        }))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+            .requestMatchers("/api/categorias").permitAll()
+            .requestMatchers("/api/categorias/{id}").permitAll()
+            .requestMatchers("/api/produtos").permitAll()
+            .requestMatchers("/api/produtos/{id}").permitAll()
+            .requestMatchers("/api/produtos/disponiveis").permitAll()
+            .requestMatchers("/api/produtos/buscar").permitAll()
+            .requestMatchers("/api/produtos/categoria/**").permitAll()
+            .requestMatchers("/api/produtos/{id}/comprar").authenticated()
+            .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("VENDEDOR")
+            .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("VENDEDOR")
+            .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("VENDEDOR")
+            .requestMatchers("/api/produtos/meus").hasRole("VENDEDOR")
+            .requestMatchers("/api/produtos/*/repor").hasRole("VENDEDOR")
+            .requestMatchers(HttpMethod.POST, "/api/categorias").hasRole("VENDEDOR")
+            .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("VENDEDOR")
+            .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("VENDEDOR")
+            .anyRequest().authenticated())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authenticationProvider(authenticationProvider())
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+}
 
     @Bean
     AuthenticationProvider authenticationProvider() {

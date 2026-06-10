@@ -1,0 +1,2 @@
+JWT_SECRET=sua_chave_secreta_aqui_com_pelo_menos_32_caracteres
+JWT_EXPIRATION=86400000

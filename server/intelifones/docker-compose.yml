@@ -1,13 +1,16 @@
-version: "3"
+version: '3.8'
 services:
+  postgres:
+    image: postgres:16  # ou postgres:15
+    container_name: postgres_intelifones
+    environment:
+      POSTGRES_DB: fones
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fones
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-   db:
-     image: postgres:9.6
-     restart: always
-     environment:
-       POSTGRES_PASSWORD: fones
-       POSTGRES_DB: fones
-     ports:
-       - 5435:5432
-     volumes:
-       - ./postgres-data:/bitnami/postgresql/data
+volumes:
+  postgres_data:
