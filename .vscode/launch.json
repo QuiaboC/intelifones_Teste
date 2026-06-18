@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-IntelifonesApplication<oxefood-api_pedro>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "br.com.ifpe.intelifones.IntelifonesApplication",
+      "projectName": "oxefood-api_pedro",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
