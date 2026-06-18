@@ -9,8 +9,19 @@ import br.com.ifpe.intelifones.util.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -170,4 +181,46 @@ public class ProdutoService {
 
         produtoRepository.aumentarQuantidade(id, quantidade);
     }
+
+    public Produto uploadImagem(
+        Long produtoId,
+        MultipartFile arquivo,
+        Long vendedorId) {
+
+    Produto produto = obterPorId(produtoId);
+
+    if (!produto.getVendedor().getId().equals(vendedorId)) {
+        throw new IllegalArgumentException(
+                "Você não pode alterar este produto");
+    }
+
+    try {
+
+        String nomeArquivo =
+                UUID.randomUUID() + "_" +
+                arquivo.getOriginalFilename();
+
+        Path pastaUploads =
+                Paths.get("uploads");
+
+        Files.createDirectories(pastaUploads);
+
+        Path caminho =
+                pastaUploads.resolve(nomeArquivo);
+
+        Files.copy(
+                arquivo.getInputStream(),
+                caminho,
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
+        produto.setImagem(nomeArquivo);
+
+        return produtoRepository.save(produto);
+
+    } catch (IOException e) {
+        throw new RuntimeException(
+                "Erro ao salvar imagem");
+    }
+}
 }

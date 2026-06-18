@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.ifpe.intelifones.model.produto.Produto;
 import br.com.ifpe.intelifones.model.produto.ProdutoService;
@@ -121,4 +122,18 @@ public class ProdutoController {
         produtoService.reporEstoque(id, quantidade, vendedorId);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Upload da imagem do produto")
+    @PostMapping("/{id}/imagem")
+    public ResponseEntity<Produto> uploadImagem(
+        @PathVariable Long id,
+        @RequestParam("arquivo") MultipartFile arquivo) {
+
+        Long vendedorId = getVendedorIdLogado();
+
+        Produto produto =
+            produtoService.uploadImagem(id, arquivo, vendedorId);
+
+    return ResponseEntity.ok(produto);
+}
 }

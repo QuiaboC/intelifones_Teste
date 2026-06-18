@@ -35,7 +35,9 @@ public class Produto {
    @Column(nullable = false)
    private Boolean ativo = true;
 
-   // Relacionamentos
+   @Column(name = "imagem")
+   private String imagem;
+
    @ManyToOne
    @JoinColumn(name = "categoria_id")
    private Categoria categoria;
