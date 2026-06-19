@@ -45,6 +45,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers("/api/categorias").permitAll()
             .requestMatchers("/api/categorias/{id}").permitAll()
             .requestMatchers("/api/produtos").permitAll()
+            .requestMatchers("/api/carrinho/**").authenticated()
             .requestMatchers("/api/produtos/{id}").permitAll()
             .requestMatchers("/api/produtos/disponiveis").permitAll()
             .requestMatchers("/api/produtos/buscar").permitAll()

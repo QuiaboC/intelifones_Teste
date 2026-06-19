@@ -81,4 +81,15 @@ public class CarrinhoController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Atualizar quantidade de um item do carrinho")
+    @PutMapping("/item/{itemId}")
+    public ResponseEntity<Void> atualizarQuantidade(
+        @PathVariable Long itemId,
+        @RequestParam Integer quantidade) {
+
+    carrinhoService.atualizarQuantidade(itemId, quantidade);
+
+    return ResponseEntity.noContent().build();
+}
 }

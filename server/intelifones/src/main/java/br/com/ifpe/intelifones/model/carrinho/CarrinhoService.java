@@ -106,4 +106,21 @@ public class CarrinhoService {
 
         itemCarrinhoRepository.deleteAll(itens);
     }
+
+    @Transactional
+public void atualizarQuantidade(Long itemId, Integer novaQuantidade) {
+    if (novaQuantidade == null || novaQuantidade <= 0) {
+        throw new BusinessException("Quantidade deve ser maior que zero");
+    }
+
+    ItemCarrinho item = itemCarrinhoRepository.findById(itemId)
+        .orElseThrow(() -> new BusinessException("Item não encontrado"));
+
+    if (item.getProduto().getQuantidade() < novaQuantidade) {
+        throw new BusinessException("Estoque insuficiente");
+    }
+
+    item.setQuantidade(novaQuantidade);
+    itemCarrinhoRepository.save(item);
+}
 }

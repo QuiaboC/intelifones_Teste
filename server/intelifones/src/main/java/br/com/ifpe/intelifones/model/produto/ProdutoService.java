@@ -80,11 +80,11 @@ public class ProdutoService {
     }
 
     public List<Produto> listarDisponiveis() {
-        return produtoRepository.findByQuantidadeGreaterThan(0);
+    return produtoRepository.findByQuantidadeGreaterThanAndAtivoTrue(0); 
     }
 
     public List<Produto> listarPorVendedor(Long vendedorId) {
-        return produtoRepository.findByVendedorId(vendedorId);
+    return produtoRepository.findByVendedorIdAndAtivoTrue(vendedorId); 
     }
 
     public List<Produto> listarPorCategoria(Long categoriaId) {

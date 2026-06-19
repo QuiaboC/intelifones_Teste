@@ -13,6 +13,10 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     List<Produto> findByVendedorId(Long vendedorId);
 
+    List<Produto> findByVendedorIdAndAtivoTrue(Long vendedorId);
+
+    List<Produto> findByQuantidadeGreaterThanAndAtivoTrue(Integer quantidade);
+
     List<Produto> findByCategoriaId(Long categoriaId);
 
     List<Produto> findByNomeContainingIgnoreCase(String nome);

@@ -9,6 +9,7 @@ import br.com.ifpe.intelifones.model.produto.ProdutoRepository;
 import br.com.ifpe.intelifones.model.usuario.Usuario;
 import br.com.ifpe.intelifones.model.usuario.UsuarioRepository;
 import br.com.ifpe.intelifones.util.exception.BusinessException;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -42,6 +43,7 @@ public class FavoritoService {
         favoritoRepository.save(favorito);
     }
 
+    @Transactional
     public void remover(Long usuarioId, Long produtoId) {
 
         favoritoRepository.deleteByUsuarioIdAndProdutoId(
