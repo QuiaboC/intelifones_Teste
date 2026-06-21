@@ -97,4 +97,19 @@ public class PedidoService {
 
         return pedido;
     }
+
+    public List<ItemPedido> listarHistoricoCompras(Long usuarioId) {
+
+    Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() ->
+                    new BusinessException("Usuário não encontrado"));
+
+    List<Pedido> pedidos = pedidoRepository.findByComprador(usuario);
+
+    return pedidos.stream()
+            .flatMap(pedido ->
+                    itemPedidoRepository.findByPedido(pedido).stream())
+            .toList();
+}
+    
 }

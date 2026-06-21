@@ -1,5 +1,6 @@
 package br.com.ifpe.intelifones.api.pedido;
 
+import br.com.ifpe.intelifones.model.pedido.ItemPedido;
 import br.com.ifpe.intelifones.model.pedido.Pedido;
 import br.com.ifpe.intelifones.model.pedido.PedidoService;
 import br.com.ifpe.intelifones.model.usuario.Usuario;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = {
         "http://localhost:3000",
@@ -48,4 +51,12 @@ public class PedidoController {
 
         return new ResponseEntity<>(pedido, HttpStatus.CREATED);
     }
+
+    @GetMapping("/historico")
+public ResponseEntity<List<ItemPedido>> historico() {
+
+    return ResponseEntity.ok(
+            pedidoService.listarHistoricoCompras(
+                    getUsuarioLogadoId()));
+}
 }
