@@ -32,4 +32,22 @@ public class Pedido {
 
     @Column(nullable = false)
     private LocalDateTime dataPedido;
+
+    @Column(nullable = false, length = 200)
+    private String endereco;
+
+    @Column(nullable = false, length = 9)
+    private String cep;
+
+    @Column(nullable = false, length = 10)
+    private String numero;
+
+    @Column(length = 100)
+    private String complemento;
+
+    @Column(length = 20)
+    private String telefoneContato;
+
+    @Column(length = 20)
+    private String formaPagamento;
 }

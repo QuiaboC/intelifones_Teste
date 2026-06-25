@@ -54,6 +54,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers(HttpMethod.POST, "/api/produtos").hasRole("VENDEDOR")
             .requestMatchers(HttpMethod.PUT, "/api/produtos/**").hasRole("VENDEDOR")
             .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").hasRole("VENDEDOR")
+            .requestMatchers("/api/pedidos/vendas").hasRole("VENDEDOR")
             .requestMatchers("/api/produtos/meus").hasRole("VENDEDOR")
             .requestMatchers("/api/produtos/*/repor").hasRole("VENDEDOR")
             .requestMatchers(HttpMethod.POST, "/api/categorias").hasRole("VENDEDOR")

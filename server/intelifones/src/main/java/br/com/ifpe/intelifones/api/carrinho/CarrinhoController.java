@@ -21,9 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/carrinho")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {
-        "http://localhost:3000",
-        "http://localhost:4000",
-        "http://localhost:8081"
+        "*"
 })
 @Tag(name = "Carrinho", description = "Endpoints do carrinho de compras")
 public class CarrinhoController {

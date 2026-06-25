@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin(origins = {
-        "http://localhost:3000",
-        "http://localhost:4000",
-        "http://localhost:8081"
+        "*"
 })
 @RestController
 @RequestMapping("/api/pedidos")
@@ -43,20 +41,25 @@ public class PedidoController {
 
     @Operation(summary = "Finalizar compra do carrinho")
     @PostMapping("/finalizar")
-    public ResponseEntity<Pedido> finalizarCompra() {
-
+    public ResponseEntity<Pedido> finalizarCompra(@RequestBody FinalizarCompraRequest request) {
         Long usuarioId = getUsuarioLogadoId();
-
-        Pedido pedido = pedidoService.finalizarCompra(usuarioId);
-
+        Pedido pedido = pedidoService.finalizarCompra(usuarioId, request);
         return new ResponseEntity<>(pedido, HttpStatus.CREATED);
     }
 
     @GetMapping("/historico")
-public ResponseEntity<List<ItemPedido>> historico() {
+    public ResponseEntity<List<ItemPedido>> historico() {
 
     return ResponseEntity.ok(
             pedidoService.listarHistoricoCompras(
                     getUsuarioLogadoId()));
+    }
+
+    @Operation(summary = "Listar vendas do vendedor logado")
+@GetMapping("/vendas")
+public ResponseEntity<List<ItemPedido>> minhasVendas() {
+    return ResponseEntity.ok(
+        pedidoService.listarVendasDoVendedor(getUsuarioLogadoId())
+    );
 }
 }
