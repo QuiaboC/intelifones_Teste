@@ -65,7 +65,7 @@ public Pedido finalizarCompra(Long usuarioId, FinalizarCompraRequest request) {
 
     Pedido pedido = Pedido.builder()
             .comprador(usuario)
-            .status(StatusPedido.PENDENTE)
+            .status(StatusPedido.PAGO)
             .dataPedido(LocalDateTime.now())
             .valorTotal(0.0)
             .endereco(request.getEndereco())
