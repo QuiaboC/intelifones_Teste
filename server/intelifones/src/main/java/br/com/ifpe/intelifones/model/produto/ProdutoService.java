@@ -200,8 +200,7 @@ public class ProdutoService {
                 UUID.randomUUID() + "_" +
                 arquivo.getOriginalFilename();
 
-        Path pastaUploads =
-                Paths.get("uploads");
+        Path pastaUploads = Paths.get("uploads", "produtos");
 
         Files.createDirectories(pastaUploads);
 

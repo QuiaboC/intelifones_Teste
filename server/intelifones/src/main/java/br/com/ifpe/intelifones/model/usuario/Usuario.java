@@ -34,6 +34,9 @@ public class Usuario implements UserDetails {
     @Column(length = 20)
     private String telefone;
 
+    @Column(name = "imagem")
+    private String imagem;
+
     @Column(length = 200)
     private String endereco;
 

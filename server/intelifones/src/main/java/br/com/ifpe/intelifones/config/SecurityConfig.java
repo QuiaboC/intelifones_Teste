@@ -42,6 +42,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers("/uploads/**").permitAll()
             .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+            .requestMatchers("/api/usuarios/me", "/api/usuarios/me/imagem").authenticated()
             .requestMatchers("/api/categorias").permitAll()
             .requestMatchers("/api/categorias/{id}").permitAll()
             .requestMatchers("/api/produtos").permitAll()
