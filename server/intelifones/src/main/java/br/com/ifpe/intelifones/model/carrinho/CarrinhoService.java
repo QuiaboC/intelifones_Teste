@@ -39,10 +39,6 @@ public class CarrinhoService {
             throw new BusinessException("Produto indisponível");
         }
 
-        if (produto.getQuantidade() < quantidade) {
-            throw new BusinessException("Estoque insuficiente");
-        }
-
         Carrinho carrinho = carrinhoRepository
                 .findByUsuario(usuario)
                 .orElseGet(() -> carrinhoRepository.save(
@@ -55,14 +51,27 @@ public class CarrinhoService {
                 .orElse(null);
 
         if (item != null) {
-            item.setQuantidade(item.getQuantidade() + quantidade);
-        } else {
-            item = ItemCarrinho.builder()
-                    .carrinho(carrinho)
-                    .produto(produto)
-                    .quantidade(quantidade)
-                    .build();
-        }
+
+    int novaQuantidade = item.getQuantidade() + quantidade;
+
+    if (novaQuantidade > produto.getQuantidade()) {
+        throw new BusinessException("Estoque insuficiente");
+    }
+
+    item.setQuantidade(novaQuantidade);
+
+} else {
+
+    if (quantidade > produto.getQuantidade()) {
+        throw new BusinessException("Estoque insuficiente");
+    }
+
+    item = ItemCarrinho.builder()
+            .carrinho(carrinho)
+            .produto(produto)
+            .quantidade(quantidade)
+            .build();
+}
 
         itemCarrinhoRepository.save(item);
     }
